@@ -31,3 +31,12 @@ func Reduce[A, B any](transactions []A, fn func(B, A) B, initialValue B) B {
 
 	return res
 }
+
+func Find[A comparable](collection []A, f func(A) bool) (val A, found bool) {
+	for _, val := range collection {
+		if ok := f(val); ok {
+			return val, true
+		}
+	}
+	return
+}
