@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"os"
+	"time"
+)
 
 func main() {
-	fmt.Print("Hello")
+	s := &Sleeper{duration: 1 * time.Second}
+	countdown(os.Stdout, s)
 }
