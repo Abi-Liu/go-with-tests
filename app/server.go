@@ -26,6 +26,8 @@ type PlayerServer struct {
 	http.Handler
 }
 
+const jsonContentType = "application/json"
+
 // NewPlayerServer creates a PlayerServer with routing configured.
 func NewPlayerServer(store PlayerStore) *PlayerServer {
 	p := new(PlayerServer)
@@ -33,7 +35,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	p.store = store
 
 	router := http.NewServeMux()
-	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+	router.Handle("/League", http.HandlerFunc(p.leagueHandler))
 	router.Handle("/players/", http.HandlerFunc(p.playersHandler))
 
 	p.Handler = router
@@ -42,15 +44,8 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", jsonContentType)
 	json.NewEncoder(w).Encode(p.store.GetLeague())
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-}
-
-func (p *PlayerServer) getLeagueTable() []Player {
-	return []Player{
-		{"Chris", 20},
-	}
 }
 
 func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
